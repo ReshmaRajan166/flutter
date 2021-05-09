@@ -1,4 +1,3 @@
-import 'package:ecom_app/newpage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -6,145 +5,76 @@ void main() {
 }
 
 class MyApplicaton extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyNewPage());
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+class MyNewPage extends StatefulWidget {
+  MyNewPage({Key key}) : super(key: key);
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyNewPageState createState() => _MyNewPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
+class _MyNewPageState extends State<MyNewPage> {
   @override
   Widget build(BuildContext context) {
+    List<String> array = [
+      "Table",
+      "Lamp",
+      "Chair",
+      "Book",
+      "Glass",
+      "Pillow",
+      "Laptop"
+    ];
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        leading: Icon(
-          Icons.close,
-          color: Colors.black,
-        ),
-        backgroundColor: Colors.white,
-        title: Text("MY APP"),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 25.0, top: 14, bottom: 14),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyNewPage(),
+      body: Center(
+        child: Container(
+          height: 110,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: array.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 70,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                              "https://s3-alpha-sig.figma.com/img/356c/5a1d/d11ee72509"
+                              "06968604e654031df96066?Expires=1621209600&Signature=LhMt{"
+                              "w6Uu7~HhVlUI-1QX0YclxD11eXrmw-Id41ElDjuPGWf5KpKu29OjXwIAOJ"
+                              "eC-MgDJb9WWRof7YofGH6ZextbVIEakjjKOuPjYEC-gwzDgDRB2Dq~lEydl"
+                              "SOdBDlSSt0Q6AXvpK8V2SihThkNjsm~CHLSBHwHU6Pcn55OF7kvfvAOFMYg"
+                              "v2~etqxFKXD-x6AIb4YpUEh4t-NDDPECYBRa88wNlsbNBa2FLJUF9kBci1I"
+                              "g6e0-wuGghKPPn1YLdktYbkff71sFnmY09xeCAyD3lOPLLWbzR-r~EGSfWVq"
+                              "hOaXGXROW7bYyamawLnWYK6kFrqX-U2Xbp3VO5ICMiQ__&Key-Pair-Id=AP"
+                              "KAINTVSUGEWH5XD5UA",
+                            ),
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      Text(array[index]),
+                    ],
                   ),
                 );
-              },
-              child: Text(
-                "Welcome Back",
-                style: TextStyle(
-                  color: Color.fromRGBO(99, 56, 32, 1),
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 25.0, top: 0, bottom: 14),
-            child: Text(
-              "Signing up or login to see our top picks for you.",
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 25.0, top: 30, bottom: 15),
-            child: Text(
-              "Email Address",
-              style: TextStyle(
-                color: Color.fromRGBO(99, 56, 32, 1),
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "eg: example@gmail.com"),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 25.0, top: 20, bottom: 15),
-            child: Text(
-              "Password",
-              style: TextStyle(
-                color: Color.fromRGBO(99, 56, 32, 1),
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "",
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
-            child: Align(
-              alignment: Alignment.center,
-              child: TextButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.green)),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyNewPage()));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Login"),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+              }),
+        ),
       ),
     );
   }
