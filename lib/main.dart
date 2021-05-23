@@ -1,59 +1,94 @@
-import 'package:ecom_app/mynewpage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApplicaton());
+  runApp(MyApp());
 }
 
-class MyApplicaton extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'To Do List',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Mypage2(
-        name: "Adfsd",
-        age: 21,
-      ),
+      home: MyHomePage(),
     );
   }
 }
 
-class MyNewPage extends StatefulWidget {
-  MyNewPage({Key key}) : super(key: key);
-
+class MyHomePage extends StatefulWidget {
   @override
-  _MyNewPageState createState() => _MyNewPageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyNewPageState extends State<MyNewPage> {
+class _MyHomePageState extends State<MyHomePage> {
+  final List<String> todoitem=<String>[];
+    final TextEditingController myController = TextEditingController();
+  void showalert(){
+    showDialog(context: context, builder: (context) => AlertDialog(
+      insetPadding: EdgeInsets.symmetric(
+              horizontal: 10.0,
+              vertical: 150.0,
+            ),
+      elevation: 16,
+      title: Text("Add to your List"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [TextField(controller: myController,autofocus: true,),
+    
+      Row(
+        children: <Widget>
+        [Expanded(
+          child:ElevatedButton(onPressed:(){Navigator.of(context).pop();
+          additem(myController.text);},
+          child: Text("add",
+          style: TextStyle(fontSize: 15,fontFamily: "Raleway",),),
+          style: ElevatedButton.styleFrom(primary: Colors.green),
+          ),
+        ),
+          Expanded( 
+child: ElevatedButton(onPressed: (){Navigator.of(context).pop();myController.clear();}, 
+child: Text("Cancel"),style: ElevatedButton.styleFrom(primary: Colors.green),),
+      ),
+      ],
+      ),],
+      ),
+    ));
+  }
+  void additem(String title)
+  {
+    setState(() {
+      todoitem.add(title);
+          
+     });
+     myController.clear();
+  }
   @override
   Widget build(BuildContext context) {
-    List<String> array = [
-      "Table",
-      "Lamp",
-      "Chair",
-      "Book",
-      "Glass",
-      "Pillow",
-      "Laptop"
-    ];
-
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(),
-            TextButton(
-              onPressed: () {},
-              child: Text("Call"),
-            )
-          ],
-        ),
+      appBar: AppBar(title: const Text('To-Do List'),backgroundColor: Colors.green,),
+body: ListView(
+        children: getitems()
+      ),
+      floatingActionButton: FloatingActionButton(
+     onPressed: showalert,
+        tooltip: 'todo',
+        backgroundColor: Colors.green,
+        child: Icon(Icons.add),
       ),
     );
+  }
+  Widget valuetodo(String title)
+  {
+    return ListTile(title: Text(title),);
+  }
+List<Widget> getitems(){
+  final List<Widget> item=<Widget>[];
+  for (String title in todoitem) {
+    item.add(valuetodo(title));
+    
+  }
+  return item;
   }
 }
