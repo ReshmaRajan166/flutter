@@ -1,12 +1,8 @@
-import 'dart:developer';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:login_app/loginpage.dart';
+import 'package:login_app/signuppage.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+void main() {
   runApp(MyApp());
 }
 
@@ -14,152 +10,95 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'To Do List',
+      title: 'login and signup',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: MyHomePage(title: 'WELCOME TO EDU'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> todoitem = <String>[];
-
-  final TextEditingController myController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    readFromDataBase();
-  }
-
-  Future writeToFirebase(String nameOfCar) async {
-    if (nameOfCar.isNotEmpty) {
-      await FirebaseFirestore.instance
-          .collection("cars")
-          .doc()
-          .set({"name": nameOfCar});
-    }
-  }
-
-  Future readFromDataBase() async {
-    final carDocuments =
-        await FirebaseFirestore.instance.collection("cars").get();
-    List<String> carNames = [];
-    carDocuments.docs.forEach((doc) {
-      carNames.add(doc.data()["name"]);
-    });
-    log(carNames.toString());
-    setState(() {
-      todoitem = carNames;
-    });
-  }
-
-  void showalert() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        elevation: 16,
-        title: Text("Add to your List"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: myController,
-              autofocus: true,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: () async {
-                    await writeToFirebase(myController.text);
-                    await readFromDataBase();
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    "Add",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: "Raleway",
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(primary: Colors.green),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    myController.clear();
-                  },
-                  child: Text("Cancel"),
-                  style: ElevatedButton.styleFrom(primary: Colors.green),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void additem(String title) {
-    setState(() {
-      todoitem.add(title);
-    });
-    myController.clear();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final listOfItems = await readFromDataBase();
-              setState(() {
-                todoitem = listOfItems;
-              });
-            },
-            icon: Icon(Icons.refresh),
+        title: Text(widget.title,style: TextStyle(color: Colors.grey,fontSize: 18),),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/bg.jpg"),
+        fit: BoxFit.cover),),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+         Padding(padding: EdgeInsets.all(10),
+          child:Container(
+          alignment: Alignment.center,
+            child: Expanded(
+              child: Image.asset("assets/log.png",
+              fit: BoxFit.cover,height: 300.0,width: 400.0,),
+            ),
           )
+          ),
+            Padding(padding: EdgeInsets.all(2),
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: 350.0,
+                height: 60.0,
+                child: Expanded(
+                  child: ElevatedButton(
+                        onPressed: () {
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyLoginPage()),
+                        );
+                  },child: Text("LOGIN",style: TextStyle(fontSize: 20,color: Colors.white
+                  ),),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.purple,
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+                  ),)
+                ),
+              ),
+            ),
+            ),
+            Padding(padding: EdgeInsets.all(2),
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: 350.0,
+                height: 60.0,
+                child: Expanded(
+                  child: ElevatedButton(onPressed: (){
+                          Navigator.push(context,
+                          MaterialPageRoute(builder: (context) =>MySignupPage()),
+                          );
+                  },
+                  child: Text("SIGNUP",style: TextStyle(fontSize: 20,color: Colors.white)),
+                  style: ElevatedButton.styleFrom(primary: Colors.grey,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50
+                  )))),),
+                ),
+              ),
+            ),)
         ],
-        title: const Text('To-Do List'),
-        backgroundColor: Colors.green,
-      ),
-      body: ListView(children: getitems()),
-      floatingActionButton: FloatingActionButton(
-        onPressed: showalert,
-        tooltip: 'todo',
-        backgroundColor: Colors.green,
-        child: Icon(Icons.add),
+        ),
       ),
     );
-  }
-
-  Widget valuetodo(String title) {
-    return ListTile(
-      title: Text(title),
-    );
-  }
-
-  List<Widget> getitems() {
-    final List<Widget> item = <Widget>[];
-    for (String title in todoitem) {
-      item.add(valuetodo(title));
-    }
-    return item;
   }
 }
